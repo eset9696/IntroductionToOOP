@@ -13,7 +13,9 @@ class Point;
 Point operator+(const Point& left, const Point& right);
 Point operator-(const Point& left, const Point& right);
 Point operator*(const Point& left, const Point& right);
+Point operator*(const Point& left, const double& right);
 Point operator/(const Point& left, const Point& right);
+Point operator/(const Point& left, const double& right);
 ostream& operator<<(ostream& os, const Point& obj);
 istream& operator>>(istream& os, Point& obj);
 double distance(const Point& A, const Point& B);
@@ -163,6 +165,13 @@ Point operator/(const Point& left, const Point& right){
 	(
 		left.getX() / right.getX(),
 		left.getY() / right.getY()
+	);
+}
+Point operator/(const Point& left, const double& right) {
+	return Point
+	(
+		left.getX() / right,
+		left.getY() / right
 	);
 }
 ostream& operator<<(ostream& os, const Point& obj) {
