@@ -174,6 +174,14 @@ Point operator/(const Point& left, const double& right) {
 		left.getY() / right
 	);
 }
+bool operator==(const Point left, const Point right) {
+	if ((left.getX() == right.getX()) && (left.getY() == right.getY())) {return true;}
+	else return false;
+}
+bool operator!=(const Point& left, const Point& right) {
+	if (left.getX() != right.getX() && left.getY() != right.getY()) return true;
+	else return false;
+}
 ostream& operator<<(ostream& os, const Point& obj) {
 	return os << "X = " << obj.getX() << "\tY = " << obj.getY();
 }
@@ -273,9 +281,9 @@ void main(){
 	cout << C << endl;
 
 #endif // !INCREMENT_CHECK
-	Point A;
+	Point A(2, 3);
 	
-	Point B;
+	Point B(2, 3);
 	
 	cin >> A >> B;
 	cout << A << endl;
@@ -310,4 +318,6 @@ void main(){
 	cout << "A *= B: " << C << endl;
 	C = A / B;
 	cout << "A /= B: " << C << endl;
+	cout << (A == B) << endl;
+	cout << (A != B) << endl;
 }
