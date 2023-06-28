@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 
 using namespace std;
 
@@ -67,40 +67,54 @@ public:
 		return *this;
 	}
 	Fraction& operator+=(const Fraction& other) {
-		Fraction temp = other;
-		this->toImproper();
-		temp.toImproper();
-		this->numerator = this->numerator * temp.getDenominator() + temp.getNumerator() * this->denominator;
+		this->integer += other.getInteger();
+		this->numerator = this->numerator * other.getDenominator() + other.getNumerator() * this->denominator;
 		this->denominator *= other.getDenominator();
 		this->reduce();
 		return *this;
 	}
 	Fraction& operator-=(const Fraction& other) {
-		Fraction temp = other;
+		int buffer = other.getNumerator() + other.getInteger() * other.getDenominator();
 		this->toImproper();
-		temp.toImproper();
-		this->numerator = this->numerator * temp.getDenominator() - temp.getNumerator() * this->denominator;
-		this->denominator *= temp.getDenominator();
+		this->numerator = this->numerator * other.getDenominator() - buffer * this->denominator;
+		this->denominator *= other.getDenominator();
 		this->reduce();
 		return *this;
 	}
 	Fraction& operator*=(const Fraction& other) {
-		Fraction temp = other;
+		int buffer = other.getNumerator() + other.getInteger() * other.getDenominator();
 		this->toImproper();
-		temp.toImproper();
-		this->numerator = this->numerator * temp.getNumerator();
-		this->denominator *= temp.getDenominator();
+		this->numerator = this->numerator * buffer;
+		this->denominator *= other.getDenominator();
 		this->reduce();
 		return *this;
 	}
+
 	Fraction& operator/=(const Fraction& other) {
-		Fraction temp = other;
+		int buffer = other.getNumerator() + other.getInteger() * other.getDenominator();
 		this->toImproper();
-		temp.toImproper();
-		this->numerator = this->numerator * temp.getDenominator();
-		this->denominator *= temp.getNumerator();
+		this->numerator = this->numerator * other.getDenominator();
+		this->denominator *= buffer;
 		this->reduce();
 		return *this;
+	}
+	Fraction& operator++() { //Prefix increment
+		integer++;
+		return *this;
+	}
+	Fraction operator++(int) { //Postfix increment
+		Fraction old = *this;
+		integer++;
+		return old;
+	}
+	Fraction& operator--(){
+		integer--;
+		return *this;
+	}
+	Fraction operator--(int) {
+		Fraction old = *this;
+		integer--;
+		return old;
 	}
 	//Methods
 	void print(){
@@ -142,7 +156,7 @@ public:
 //Functions
 Fraction& operator+(const Fraction& left, const Fraction& right){
 	Fraction result = left;
-	Fraction tempR = right; //Фиг знает почему, но если удалить эту строку то в знаменатель запишется какой то мусор
+	Fraction tempR = right; //Р¤РёРі Р·РЅР°РµС‚ РїРѕС‡РµРјСѓ, РЅРѕ РµСЃР»Рё СѓРґР°Р»РёС‚СЊ СЌС‚Сѓ СЃС‚СЂРѕРєСѓ С‚Рѕ РІ Р·РЅР°РјРµРЅР°С‚РµР»СЊ Р·Р°РїРёС€РµС‚СЃСЏ РєР°РєРѕР№ С‚Рѕ РјСѓСЃРѕСЂ
 	return result += right;
 }
 Fraction& operator-(const Fraction& left, const Fraction& right) {
@@ -162,6 +176,9 @@ Fraction& operator/(const Fraction& left, const Fraction& right) {
 }
 //#define CONSTRUCTORS_CHECK
 //#define METHODS_CHECK
+//#define OPERATORS_CHECK
+#define FUNCTIONS_CHECK
+//#define INCREMENT_CHECK
 void main() {
 	setlocale(LC_ALL, "");
 #ifdef CONSTRUCTORS_CHECK
@@ -195,12 +212,12 @@ void main() {
 	A.toImproper();
 	A.print();
 #endif // METHODS_CHECK
-
-	Fraction A(1, 3, 4);
-	Fraction B(3, 3, 5);
+#ifdef OPERATORS_CHECK
+	Fraction A(3, 2, 3);
+	Fraction B(1, 3, 5);
 	A.print();
 	B.print();
-	/*A += B;
+	A += B;
 	A.print();
 	A -= B;
 	A.print();
@@ -208,13 +225,19 @@ void main() {
 	A.print();
 	A /= B;
 	A.print();
-	B.print();*/
+	B.print();
+#endif // OPERATORS_CHECK
+#ifdef FUNCTIONS_CHECK
+	Fraction A(3, 2, 3);
+	Fraction B(1, 3, 5);
+	A.print();
+	B.print();
 	Fraction C;
 	C = A + B;
 	A.print();
 	B.print();
 	C.print();
-	C = A - B;
+	C = C - B;
 	A.print();
 	B.print();
 	C.print();
@@ -226,4 +249,18 @@ void main() {
 	A.print();
 	B.print();
 	C.print();
+#endif // FUNCTIONS_CHECK
+#ifdef INCREMENT_CHECK
+	Fraction A(1, 3, 4);
+	A.print();
+	++A;
+	A.print();
+	A++;
+	A.print();
+	--A;
+	A.print();
+	A--;
+	A.print();
+#endif // INCREMENT_CHECK
+
 }
