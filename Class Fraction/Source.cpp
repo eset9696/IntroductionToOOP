@@ -9,10 +9,10 @@ Fraction operator-(Fraction left, Fraction right);
 Fraction operator*(Fraction left, Fraction right);
 Fraction operator/(Fraction left, Fraction right);
 bool operator<(Fraction left, Fraction right);
-bool operator>(const Fraction& left, const Fraction& right);
+bool operator>(Fraction left, Fraction right);
 bool operator==(Fraction left, Fraction right);
 bool operator!=(const Fraction& left, const Fraction& right);
-bool operator<=(Fraction left, Fraction right);
+bool operator<=(const Fraction& left, const Fraction& right);
 bool operator>=(const Fraction& left, const Fraction& right);
 
 class Fraction {
@@ -48,6 +48,12 @@ public:
 	}
 	Fraction(int integer) {
 		this->integer = integer;
+		this->numerator = 0;
+		this->denominator = 1;
+		cout << "1 Parameter Constructor:\t" << this << endl;
+	}
+	Fraction(double value) {
+		this->integer = round(value);
 		this->numerator = 0;
 		this->denominator = 1;
 		cout << "1 Parameter Constructor:\t" << this << endl;
@@ -183,6 +189,21 @@ public:
 		}
 		return *this;
 	}
+	Fraction& reduceEVKLD_KOA() { // Эвклид Олега Анатольевича
+		toProper();
+		int more, less, rest;
+		more = denominator;
+		less = numerator;
+		do{
+			rest = more % less;
+			more = less;
+			less = rest;
+		} while (rest);
+		int GCD = more; //Greatest common Divisor - наибольший общий делитель
+		numerator /= GCD;
+		denominator /= GCD;
+		return *this;
+	}
 	Fraction& reduceEVKLD() {
 		toProper();
 		int nod = calcNOD(numerator, denominator);
@@ -227,30 +248,62 @@ Fraction operator/(Fraction left, Fraction right) {
 bool operator<(Fraction left, Fraction right) {
 	left.toImproper();
 	right.toImproper();
-	return left.getNumerator() * right.getDenominator() < right.getNumerator() * left.getDenominator()? true : false;
-	//return left - right < 0 ? true : false;
+	return left.getNumerator() * right.getDenominator() < right.getNumerator() * left.getDenominator();
 }
-bool operator>(const Fraction& left, const Fraction& right) {
-	return left < right ? false : true;
+bool operator>(Fraction left, Fraction right) {
+	left.toImproper();
+	right.toImproper();
+	return left.getNumerator() * right.getDenominator() > right.getNumerator() * left.getDenominator();
 }
 bool operator==(Fraction left, Fraction right) {
 	left.toImproper();
 	right.toImproper();
-	return left.getNumerator() * right.getDenominator() == right.getNumerator() * left.getDenominator()? true : false;
+	return left.getNumerator() * right.getDenominator() == right.getNumerator() * left.getDenominator();
 }
 bool operator!=(const Fraction& left, const Fraction& right) {
-	return left == right? false : true;
+	return !(left == right);
 }
-bool operator<=(Fraction left,Fraction right) {
-	left.toImproper();
-	right.toImproper();
-	return left.getNumerator() * right.getDenominator() <= right.getNumerator() * left.getDenominator()? true : false;
+bool operator<=(const Fraction& left, const Fraction& right) {
+	return !(left > right);
 }
 bool operator>=(const Fraction& left, const Fraction& right) {
-	return left <= right ? false : true;
+	return !(left < right);
+}
+std::ostream& operator<<(std::ostream& os, const Fraction& obj){
+	if (obj.getInteger()) os << obj.getInteger();
+	if (obj.getNumerator()) {
+		if (obj.getInteger())os << "(";
+		os << obj.getNumerator() << "/" << obj.getDenominator();
+		if (obj.getInteger())os << ")";
+	}
+	else if (obj.getInteger() == 0) os << 0;
+	return os;
+}
+int& getIntFromConsole(std::istream& os){
+	int value;
+	bool isCorrectInput;
+	do { //Проверка на дурака
+		os >> value;
+		if (!(isCorrectInput = cin.good())) {
+			cin.clear(), cin.ignore();
+			cout << "Введено некорректное значение, введите целое число: \t" << endl;
+		}
+	} while (!isCorrectInput);
+	return value;
+}
+std::istream& operator>>(std::istream& os, Fraction& obj) {
+	int integer, numerator, denominator;
+	cout << "Введите целую часть дроби: \t" << endl;
+	integer = getIntFromConsole(os);
+	cout << "Введите числитель дроби: \t" << endl;
+	numerator = getIntFromConsole(os);
+	cout << "Введите знаменатель дроби: \t" << endl;
+	denominator = getIntFromConsole(os);
+	obj.setInteger(integer), obj.setNumerator(numerator), obj.setDenominator(denominator);
+	return os;
 }
 //#define CONSTRUCTORS_CHECK
-#define METHODS_CHECK
+//#define METHODS_CHECK
 //#define OPERATORS_CHECK
 //#define FUNCTIONS_CHECK
 //#define INCREMENT_CHECK
@@ -278,46 +331,24 @@ void main() {
 
 #endif // CONSTRUCTORS_CHECK
 #ifdef METHODS_CHECK
-	Fraction A(2, 3, 4);
+	Fraction A(1, 3);
 	A.print();
-	Fraction B(3, 4, 5);
-	Fraction C = A + B;
-	C.print();
-	C = A - B;
-	C.print();
-	A += B;
-	A.print();
-	A -= B;
-	A.print();
-	A *= B;
-	A.print();
-	A /= B;
-	A.print();
+	Fraction B(5, 11);
 	Fraction D = A;
 	bool a;
-	a = A < B;
-	cout << "A < B: " << a << endl;
-	a = A > B;
-	cout << "A > B: " << a << endl;
-	a = A == D;
-	cout << "A == D: " << a << endl;
-	a = A != D;
-	cout << "A != D: " << a << endl;
-	a = A == B;
-	cout << "A == B: " << a << endl;
-	a = A != B;
-	cout << "A != B: " << a << endl;
-	a = A <= D;
-	cout << "A <= D: " << a << endl;
+	a = A <= B;
+	cout << "A <= B: " << a << endl;
 	a = A >= B;
 	cout << "A >= B: " << a << endl;
+	a = A == B;
+	cout << "A == B: " << a << endl;
 #endif // METHODS_CHECK
 #ifdef OPERATORS_CHECK
-	Fraction A(3, 2, 3);
-	Fraction B(1, 3, 5);
+	Fraction A(2, 3, 4);
+	Fraction B(3, 16, 20);
 	A.print();
 	B.print();
-	A += B;
+	A *= B;
 	A.print();
 	A -= B;
 	A.print();
@@ -326,6 +357,7 @@ void main() {
 	A /= B;
 	A.print();
 	B.print();
+	cout << A << "\t" << B << endl;
 #endif // OPERATORS_CHECK
 #ifdef FUNCTIONS_CHECK
 	Fraction A(3, 2, 3);
@@ -362,5 +394,13 @@ void main() {
 	A--;
 	A.print();
 #endif // INCREMENT_CHECK
-
+	/*Fraction A(840, 3600);
+	A.print();
+	A.reduceEVKLD_KOA();
+	A.print();*/
+	Fraction A;
+	cin >> A;
+	A.print();
+	Fraction B = 1.95;
+	B.print();
 }
