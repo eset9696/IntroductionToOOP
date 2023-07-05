@@ -1,9 +1,12 @@
-﻿#include <iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 class Fraction;
 int calcNOD(int a, int b);
+int calcDenominator(double value);
 Fraction operator+(Fraction left, Fraction right);
 Fraction operator-(Fraction left, Fraction right);
 Fraction operator*(Fraction left, Fraction right);
@@ -63,6 +66,42 @@ public:
 		cout << "1 Parameter Constructor:\t" << this << endl;
 	}
 
+	Fraction(double value) {
+		this->denominator = calcDenominator(value);
+		this->integer = int(value);
+		this->numerator = (value - int(value)) * denominator;
+		cout << "1 Parameter double Constructor: " << this << endl;
+	}
+
+	Fraction(char* buffer) {
+		double result = 0;
+		int denom = 1;
+		int pos = INT_MAX;
+		char substr_int[256] = {};
+		char substr_numer[256] = {};
+		for (int i = 0, j = 0; buffer[i]; i++) {
+			if (buffer[i] == '.') {
+				pos = i;
+			}
+			if(i < pos){
+				substr_int[i] = buffer[i];
+			}
+			else if(i > pos) {
+				substr_numer[j++] = buffer[i];
+				denom *= 10;
+			}
+		}
+		/*for (int i = 0; i < pos; i++) { substr_int[i] = buffer[i]; }
+		for (int i = pos + 1, j = 0; buffer[i]; i++, j++) {
+			substr_numer[j] = buffer[i];
+			denom *= 10;
+		}*/
+		this->denominator = denom;
+		this->integer = atoi(buffer);
+		this->numerator = atoi(substr_numer);
+		cout << "1 Parameter from char* Constructor: " << this << endl;
+	}
+
 	Fraction(int numerator, int denominator) {
 		this->integer = 0;
 		this->numerator = numerator;
@@ -84,7 +123,10 @@ public:
 		cout << "Copy constructor:\t\t" << this << endl;
 	}
 
-	~Fraction() { cout << "Destructor:\t\t\t" << this << endl; }
+	~Fraction() { 
+		cout << "Destructor:\t\t\t" << this << endl; 
+	}
+
 	//Operators
 	Fraction& operator=(const Fraction& other) {
 		this->integer = other.getInteger();
@@ -95,42 +137,24 @@ public:
 	}
 
 	Fraction& operator+=(const Fraction& other) {
-		/*this->integer += other.getInteger();
-		this->numerator = this->numerator * other.getDenominator() + other.getNumerator() * this->denominator;
-		this->denominator *= other.getDenominator();
-		this->reduce();*/
+		
 		return *this = *this + other;
 	}
 
 	Fraction& operator-=(const Fraction& other) {
-		/*int buffer = other.getNumerator() + other.getInteger() * other.getDenominator();
-		this->toImproper();
-		this->numerator = this->numerator * other.getDenominator() - buffer * this->denominator;
-		this->denominator *= other.getDenominator();
-		this->reduce();
-		return *this;*/
+		
 		*this = *this - other;
 		reduce();
 		return *this;
 	}
 
 	Fraction& operator*=(const Fraction& other) {
-		/*int buffer = other.getNumerator() + other.getInteger() * other.getDenominator();
-		this->toImproper();
-		this->numerator = this->numerator * buffer;
-		this->denominator *= other.getDenominator();
-		this->reduce();
-		return *this;*/
+		
 		return *this = *this * other;
 	}
 
 	Fraction& operator/=(const Fraction& other) {
-		/*int buffer = other.getNumerator() + other.getInteger() * other.getDenominator();
-		this->toImproper();
-		this->numerator = this->numerator * other.getDenominator();
-		this->denominator *= buffer;
-		this->reduce();
-		return *this;*/
+		
 		return *this = *this / other;
 	}
 
@@ -175,13 +199,6 @@ public:
 	}
 
 	Fraction& toProper() {
-		/*if(this->numerator >= this->denominator){
-			this->integer = this->integer + this->numerator / this->denominator;
-			this->numerator = this->numerator % this->denominator;
-		}else if(-this->numerator >= this->denominator){
-			this->integer = -(this->integer + -this->numerator / this->denominator);
-			this->numerator = -(this->numerator % this->denominator);
-		}*/
 		integer += numerator / denominator;
 		numerator %= denominator;
 		return *this;
@@ -217,6 +234,7 @@ public:
 		int more, less, rest;
 		more = denominator;
 		less = numerator;
+		if (less == 0) return *this;
 		do{
 			rest = more % less;
 			more = less;
@@ -247,7 +265,43 @@ int calcNOD(int a, int b) {
 	}
 }
 
+int calcDenominator(double value) {
+	bool check = 1;
+	int denominator = 1;
+	while (check) {
+		int int_val = value;
+		if (int_val != value) {
+			denominator *= 10;
+			value *= 10;
+		}
+		else {
+			check = 0;
+		}
+	}
+	return denominator;
+}
+
+double toDoubleNumber(const char* buffer) {
+	double result = 0;
+	int denominator = 1;
+	int pos = 0;
+	char substr_int[256] = {};
+	char substr_numer[256] = {};
+	for (int i = 0; buffer[i]; i++) {
+		if(buffer[i] == '.'){
+			pos = i;
+		}
+	}
+	for (int i = 0; i < pos; i++) {substr_int[i] = buffer[i];}
+	for (int i = pos + 1; buffer[i]; i++) { 
+		substr_numer[i] = buffer[i];
+		denominator *= 10;
+	}
+
+	return result;
+}
 Fraction operator+(Fraction left, Fraction right) {
+
 	left.toImproper();
 	right.toImproper();
 	return Fraction
@@ -316,37 +370,48 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj){
 	return os;
 }
 
-int& getIntFromConsole(std::istream& os){
-	int value;
-	bool isCorrectInput;
-	do { //Проверка на дурака
-		os >> value;
-		if (!(isCorrectInput = cin.good())) {
-			cin.clear(); 
-			cin.ignore();
-			cout << "Введено некорректное значение, введите целое число: \t" << endl;
-		}
-	} while (!isCorrectInput);
-	return value;
-}
+std::istream& operator>>(std::istream& is, Fraction& obj) {
+	/*int integer, numerator, denominator;
 
-std::istream& operator>>(std::istream& os, Fraction& obj) {
-	int integer, numerator, denominator;
-
-	cout << "Введите целую часть дроби: \t" << endl;
-	integer = getIntFromConsole(os);
-
-	cout << "Введите числитель дроби: \t" << endl;
-	numerator = getIntFromConsole(os);
-
-	cout << "Введите знаменатель дроби: \t" << endl;
-	denominator = getIntFromConsole(os);
+	is >> integer >> numerator >> denominator;
 
 	obj.setInteger(integer);
 	obj.setNumerator(numerator);
-	obj.setDenominator(denominator);
+	obj.setDenominator(denominator);*/
 
-	return os;
+	const int SIZE = 256;
+	char buffer[SIZE] = {};
+	
+	is >> buffer;
+
+	int number[3] = {};
+
+	int n = 0;  //counter of entered numbers
+
+	for (int i = 0; buffer[i]; i++) {
+		if(buffer[i] == '.'){
+			obj = Fraction(buffer);
+			return is;
+		}
+	}
+
+	char delimeters[] = "()/";
+	for(char* pch = strtok(buffer, delimeters); pch; pch = strtok(NULL, delimeters)) {
+		number[n++] = atoi(pch);
+	}
+
+	switch(n) {
+	case 1: 
+		obj = Fraction(number[0]);
+		break;
+	case 2:
+		obj = Fraction(number[0], number[1]);
+		break;
+	case 3:
+		obj = Fraction(number[0], number[1], number[2]);
+		break;
+	}
+	return is;
 }
 
 //#define CONSTRUCTORS_CHECK
@@ -354,7 +419,8 @@ std::istream& operator>>(std::istream& os, Fraction& obj) {
 //#define OPERATORS_CHECK
 //#define FUNCTIONS_CHECK
 //#define INCREMENT_CHECK
-
+//#define INPUT_CHECK_1
+//#define INPUT_CHECK_2
 void main() {
 	setlocale(LC_ALL, "");
 
@@ -454,8 +520,28 @@ void main() {
 	A.reduceEVKLD_KOA();
 	A.print();*/
 
+	
+#ifdef INPUT_CHECK_1
 	Fraction A;
+	cout << "Введите простую дробь:\t";
 	cin >> A;
 	A.print();
-
+	A.reduce();
+	A.print();
+#endif // INPUT_CHECK_1
+	
+#ifdef INPUT_CHECK_2
+	Fraction A, B, C;
+	cin >> A >> B >> C;
+	A.print();
+	B.print();
+	C.print();
+#endif // INPUT_CHECK_2
+	//int a = 3; // No converion
+	//double b = 3; // Conversion from less to more
+	//int c = b; // Convrion from more to less without data loss
+	//int d = 4.5; // Convrion from more to less with data loss
+	Fraction A;
+	cin >> A;
+	cout << A << endl;
 }
