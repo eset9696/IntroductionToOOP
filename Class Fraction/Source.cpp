@@ -591,6 +591,6 @@ void main() {
 	double b = (double)B;
 	cout << b << endl;
 #endif // CONVERSION_FROM_CLASS_TO_OTHER
-	Fraction A = 2.7699999189;
+	Fraction A = 2.33;
 	cout << A << endl;
 }
