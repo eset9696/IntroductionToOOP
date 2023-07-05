@@ -73,33 +73,33 @@ public:
 		cout << "1 Parameter double Constructor: " << this << endl;
 	}
 
-	Fraction(char* buffer) {
-		int denom = 1;
-		int pos = INT_MAX;
-		char substr_int[256] = {};
-		char substr_numer[256] = {};
-		for (int i = 0, j = 0; buffer[i]; i++) {
-			if (buffer[i] == '.') {
-				pos = i;
-			}
-			if(i < pos){
-				substr_int[i] = buffer[i];
-			}
-			else if(i > pos) {
-				substr_numer[j++] = buffer[i];
-				denom *= 10;
-			}
-		}
-		/*for (int i = 0; i < pos; i++) { substr_int[i] = buffer[i]; }
-		for (int i = pos + 1, j = 0; buffer[i]; i++, j++) {
-			substr_numer[j] = buffer[i];
-			denom *= 10;
-		}*/
-		this->integer = atoi(buffer);
-		this->numerator = atoi(substr_numer);
-		this->denominator = denom;
-		cout << "1 Parameter from char* Constructor: " << this << endl;
-	}
+	//Fraction(char* buffer) {
+	//	int denom = 1;
+	//	int pos = INT_MAX;
+	//	char substr_int[256] = {};
+	//	char substr_numer[256] = {};
+	//	for (int i = 0, j = 0; buffer[i]; i++) {
+	//		if (buffer[i] == '.') {
+	//			pos = i;
+	//		}
+	//		if(i < pos){
+	//			substr_int[i] = buffer[i];
+	//		}
+	//		else if(i > pos) {
+	//			substr_numer[j++] = buffer[i];
+	//			denom *= 10;
+	//		}
+	//	}
+	//	/*for (int i = 0; i < pos; i++) { substr_int[i] = buffer[i]; }
+	//	for (int i = pos + 1, j = 0; buffer[i]; i++, j++) {
+	//		substr_numer[j] = buffer[i];
+	//		denom *= 10;
+	//	}*/
+	//	this->integer = atoi(buffer);
+	//	this->numerator = atoi(substr_numer);
+	//	this->denominator = denom;
+	//	cout << "1 Parameter from char* Constructor: " << this << endl;
+	//}
 
 	Fraction(int numerator, int denominator) {
 		this->integer = 0;
@@ -370,31 +370,36 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj){
 }
 
 std::istream& operator>>(std::istream& is, Fraction& obj) {
-	/*int integer, numerator, denominator;
-
-	is >> integer >> numerator >> denominator;
-
-	obj.setInteger(integer);
-	obj.setNumerator(numerator);
-	obj.setDenominator(denominator);*/
-
+	
 	const int SIZE = 256;
 	char buffer[SIZE] = {};
 	
 	is >> buffer;
 
-	int number[3] = {};
+	bool isDouble = 0;
+	char numerator[256] = {};
+	int denominator = 1;
+	int pos = INT_MAX;
 
-	int n = 0;  //counter of entered numbers
-
-	for (int i = 0; buffer[i]; i++) {
-		if(buffer[i] == '.'){
-			obj = Fraction(buffer);
-			return is;
+	for (int i = 0, j = 0; buffer[i]; i++) {
+		if (buffer[i] == '.') {
+			isDouble = 1;
+			pos = i;
+		}
+		if (i > pos) {
+			numerator[j++] = buffer[i];
+			denominator *= 10;
 		}
 	}
+	if(isDouble){
+		obj = Fraction(atoi(buffer), atoi(numerator), denominator);
+		return is;
+	}
 
+	int number[3] = {};
+	int n = 0;  //counter of entered numbers
 	char delimeters[] = "()/";
+
 	for(char* pch = strtok(buffer, delimeters); pch; pch = strtok(NULL, delimeters)) {
 		number[n++] = atoi(pch);
 	}
