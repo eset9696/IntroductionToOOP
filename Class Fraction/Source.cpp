@@ -74,7 +74,6 @@ public:
 	}
 
 	Fraction(char* buffer) {
-		double result = 0;
 		int denom = 1;
 		int pos = INT_MAX;
 		char substr_int[256] = {};
@@ -96,9 +95,9 @@ public:
 			substr_numer[j] = buffer[i];
 			denom *= 10;
 		}*/
-		this->denominator = denom;
 		this->integer = atoi(buffer);
 		this->numerator = atoi(substr_numer);
+		this->denominator = denom;
 		cout << "1 Parameter from char* Constructor: " << this << endl;
 	}
 
