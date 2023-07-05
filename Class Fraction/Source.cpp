@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#define delimeter "\n---------------------------------------\n"
+
 using namespace std;
 
 class Fraction;
@@ -59,19 +61,29 @@ public:
 		cout << "Defoult Constructor:\t\t" << this << endl;
 	}
 
-	Fraction(int integer) {
+	explicit Fraction(int integer) {
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
 		cout << "1 Parameter Constructor:\t" << this << endl;
 	}
 
-	Fraction(double value) {
+	Fraction(double decimal) {
+		decimal += 1e-10;
+		integer = decimal;
+		decimal -= integer;
+		denominator = 1e+9;
+		numerator = decimal * denominator;
+		reduce();
+		cout << "1 Parameter double Constructor: " << this << endl;
+	}
+
+	/*Fraction(double value) {
 		this->denominator = calcDenominator(value);
 		this->integer = int(value);
 		this->numerator = (value - int(value)) * denominator;
 		cout << "1 Parameter double Constructor: " << this << endl;
-	}
+	}*/
 
 	//Fraction(char* buffer) {
 	//	int denom = 1;
@@ -122,8 +134,8 @@ public:
 		cout << "Copy constructor:\t\t" << this << endl;
 	}
 
-	~Fraction() { 
-		cout << "Destructor:\t\t\t" << this << endl; 
+	~Fraction() {
+		cout << "Destructor:\t\t\t" << this << endl;
 	}
 
 	//Operators
@@ -136,24 +148,24 @@ public:
 	}
 
 	Fraction& operator+=(const Fraction& other) {
-		
+
 		return *this = *this + other;
 	}
 
 	Fraction& operator-=(const Fraction& other) {
-		
+
 		*this = *this - other;
 		reduce();
 		return *this;
 	}
 
 	Fraction& operator*=(const Fraction& other) {
-		
+
 		return *this = *this * other;
 	}
 
 	Fraction& operator/=(const Fraction& other) {
-		
+
 		return *this = *this / other;
 	}
 
@@ -183,6 +195,14 @@ public:
 		Fraction old = *this;
 		integer--;
 		return old;
+	}
+	//Type-cast operators
+	explicit operator int()const {
+		return integer;
+	}
+	
+	explicit operator double()const {
+		return integer + (double)numerator/denominator;
 	}
 
 	//Methods
@@ -425,6 +445,8 @@ std::istream& operator>>(std::istream& is, Fraction& obj) {
 //#define INCREMENT_CHECK
 //#define INPUT_CHECK_1
 //#define INPUT_CHECK_2
+//#define CONVERSION_FROM_OTHER_TO_CLASS
+//#define CONVERSION_FROM_CLASS_TO_OTHER
 void main() {
 	setlocale(LC_ALL, "");
 
@@ -545,7 +567,30 @@ void main() {
 	//double b = 3; // Conversion from less to more
 	//int c = b; // Convrion from more to less without data loss
 	//int d = 4.5; // Convrion from more to less with data loss
-	Fraction A;
-	cin >> A;
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+	Fraction A = Fraction(5);
+	cout << A << endl;
+	cout << delimeter << endl;
+	Fraction B;
+	cout << delimeter << endl;
+	B = Fraction(8);
+	cout << delimeter << endl;
+	cout << B << endl;
+	//Fraction C = 8; //explicit конструктор невозможно вызвать оператором присваивания
+	//Fraction C(10); // explicit конструктор можно вызвать только так.
+	Fraction C{ 10 }; // или так.
+	cout << C << endl;
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
+#ifdef CONVERSION_FROM_CLASS_TO_OTHER
+	Fraction A(2, 1, 2);
+	cout << A << endl;
+	int a = int(A);
+	cout << a << endl;
+	Fraction B(2, 3, 4);
+	cout << B << endl;
+	double b = (double)B;
+	cout << b << endl;
+#endif // CONVERSION_FROM_CLASS_TO_OTHER
+	Fraction A = 2.7699999189;
 	cout << A << endl;
 }
