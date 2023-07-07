@@ -120,21 +120,27 @@ String operator+(String& left, String& right) {
 
 void main() {
 	setlocale(LC_ALL, "");
+
 	String str1;
 	str1.print();
 
 	String str2 = 5;
 	str2.print();
+
 	String str3 = "Hello";
 	str3.print();
+
 	String str4 = "World";
 	str4.print();
+
 	String str5 = str3 + str4;
 	str5.print();
 	cout << str5 << endl;
+
 	String str6;
 	str6 = str5;
 	cout << str6 << endl;
+
 	String str7;
 	cin >> str7;
 	cout << str7 << endl;
