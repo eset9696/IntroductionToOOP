@@ -592,5 +592,8 @@ void main() {
 	cout << b << endl;
 #endif // CONVERSION_FROM_CLASS_TO_OTHER
 	Fraction A = 2.33;
+	Fraction B = A;
+	Fraction C;
+	C = A;
 	cout << A << endl;
 }
