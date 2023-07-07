@@ -26,17 +26,6 @@ public:
 		return size;
 	}
 
-	void setString(char* str) {
-		for (int i = 0; str[i]; i++)
-		{
-			this->str[i] = str[i];
-		}
-	}
-
-	void setSize(int size) {
-		this->size = size;
-	}
-
 	//Constructors
 	explicit String(int size = 80) {
 		this->size = size;
@@ -45,7 +34,7 @@ public:
 		cout << "Default constructor\t" << this << endl;
 	}
 
-	String(const char string[]) {
+	String(const char* string) {
 		this->size = strlen(string) + 1;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
@@ -74,7 +63,7 @@ public:
 
 	// Operators
 
-	String& operator=(const String& other) {
+	/*String& operator=(const String& other) {
 		this->size = other.getSize();
 		for (int i = 0; i < size; i++)
 		{
@@ -82,6 +71,10 @@ public:
 		}
 		cout << "Copy assignment \t" << this << endl;
 		return *this;
+	}*/
+
+	char& operator[](int index) const {
+		return str[index];
 	}
 
 	//Methods
@@ -117,13 +110,13 @@ ostream& operator<<(ostream& os, String& obj) {
 //	return is;
 //}
 
-String operator+(String& left, String& right) {
+String operator+(const String& left, const String& right) {
 	String cat(left.getSize() + right.getSize() - 1);
-	for (int i = 0, j = 0; i < left.getSize(); i++) {
-		cat.getString()[i] = left.getString()[i];
+	for (int i = 0; i < left.getSize(); i++) {
+		cat[i] = left[i];
 	}
-	for (int i = 0, j = 0; i < right.getSize(); i++) {
-		cat.getString()[i + left.getSize() - 1] = right.getString()[i];
+	for (int i = 0; i < right.getSize(); i++) {
+		cat[i + left.getSize() - 1] = right[i];
 	}
 	return cat;
 }
