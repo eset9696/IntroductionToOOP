@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 
 using namespace std;
 using std::cout;
@@ -10,8 +10,8 @@ int length(const char* str);
 
 class String {
 
-	int size;                //Размер строки в байтах
-	char* str;               //адрес строки в динамической памяти
+	int size;                //Р Р°Р·РјРµСЂ СЃС‚СЂРѕРєРё РІ Р±Р°Р№С‚Р°С…
+	char* str;               //Р°РґСЂРµСЃ СЃС‚СЂРѕРєРё РІ РґРёРЅР°РјРёС‡РµСЃРєРѕР№ РїР°РјСЏС‚Рё
 	
 public:
 
