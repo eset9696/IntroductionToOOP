@@ -22,8 +22,9 @@ public:
 	int getSize()const {
 		return size;
 	}
+
 	void setString(char* str) {
-		for (int i = 0; i < size; i++)
+		for (int i = 0; str[i]; i++)
 		{
 			this->str[i] = str[i];
 		}
@@ -49,7 +50,7 @@ public:
 			this->str[i] = string[i];
 		}
 		cout << delimeter << endl;
-		cout << "1 Arg Constructor\t" << this << endl;
+		cout << "Char constructor\t" << this << endl;
 	}
 	String(const String& other) {
 		this->size = other.getSize();
@@ -67,6 +68,8 @@ public:
 		cout << delimeter << endl;
 		cout << "Destructor\t\t" << this << endl;
 	}
+
+	// Operators
 
 	String& operator=(const String& other) {
 		this->size = other.getSize();
@@ -86,6 +89,7 @@ public:
 	}
 
 };
+
 int length(const char* str){
 	int length = 0;
 	for (int i = 0; str[i]; i++)
@@ -94,19 +98,22 @@ int length(const char* str){
 	}
 	return ++length;
 }
+
 ostream& operator<<(ostream& os, String& obj) {
 	cout << "Size:\t" << obj.getSize() << endl;
 	cout << "String:\t" << obj.getString();
 	return os;
 }
+
 istream& operator>>(istream& is, String& obj) {
-	const int size = 60;
+	const int size = 256;
 	char buffer[size] = {};
 	is.getline(buffer, size);
 	obj.setString(buffer);
 	obj.setSize(length(buffer));
 	return is;
 }
+
 String operator+(String& left, String& right) {
 	int size = left.getSize() + right.getSize();
 	char temp[256] = {};
