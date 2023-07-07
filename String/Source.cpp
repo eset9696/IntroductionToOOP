@@ -15,7 +15,10 @@ class String {
 	
 public:
 
-	char* getString()const {
+	const char* getString()const {
+		return str;
+	}
+	char* getString() {
 		return str;
 	}
 
@@ -35,7 +38,7 @@ public:
 	}
 
 	//Constructors
-	String(int size = 80) {
+	explicit String(int size = 80) {
 		this->size = size;
 		this->str = new char[size] {};
 		cout << delimeter << endl;
@@ -43,7 +46,7 @@ public:
 	}
 
 	String(const char string[]) {
-		this->size = length(string);
+		this->size = strlen(string) + 1;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 		{
@@ -53,11 +56,11 @@ public:
 		cout << "Char constructor\t" << this << endl;
 	}
 	String(const String& other) {
-		this->size = other.getSize();
+		this->size = other.size;
 		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 		{
-			this->str[i] = other.getString()[i];
+			this->str[i] = other.str[i];
 		}
 		cout << delimeter << endl;
 		cout << "Copy Constructor\t" << this << endl;
@@ -105,24 +108,24 @@ ostream& operator<<(ostream& os, String& obj) {
 	return os;
 }
 
-istream& operator>>(istream& is, String& obj) {
-	const int size = 256;
-	char buffer[size] = {};
-	is.getline(buffer, size);
-	obj.setString(buffer);
-	obj.setSize(length(buffer));
-	return is;
-}
+//istream& operator>>(istream& is, String& obj) {
+//	const int size = 256;
+//	char buffer[size] = {};
+//	is.getline(buffer, size);
+//	obj.setString(buffer);
+//	obj.setSize(length(buffer));
+//	return is;
+//}
 
 String operator+(String& left, String& right) {
-	int size = left.getSize() + right.getSize();
-	char temp[256] = {};
-	for (int i = 0, j = 0; i < size; i++) {
-		i < left.getSize() - 1?	temp[i] = left.getString()[i]: temp[i] = right.getString()[j++];
+	String cat(left.getSize() + right.getSize() - 1);
+	for (int i = 0, j = 0; i < left.getSize(); i++) {
+		cat.getString()[i] = left.getString()[i];
 	}
-	return String(
-		temp
-	);
+	for (int i = 0, j = 0; i < right.getSize(); i++) {
+		cat.getString()[i + left.getSize() - 1] = right.getString()[i];
+	}
+	return cat;
 }
 
 void main() {
@@ -131,7 +134,7 @@ void main() {
 	String str1;
 	str1.print();
 
-	String str2 = 5;
+	String str2(5);
 	str2.print();
 
 	String str3 = "Hello";
@@ -144,12 +147,12 @@ void main() {
 	str5.print();
 	cout << str5 << endl;
 
-	String str6;
+	/*String str6;
 	str6 = str5;
 	cout << str6 << endl;
 
 	String str7;
 	cin >> str7;
-	cout << str7 << endl;
+	cout << str7 << endl;*/
 
 }
