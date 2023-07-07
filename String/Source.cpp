@@ -6,7 +6,6 @@ using std::cout;
 #define delimeter "\n---------------------\n"
 
 class String;
-int length(const char* str);
 
 class String {
 
@@ -15,7 +14,7 @@ class String {
 	
 public:
 
-	const char* getString()const {
+	const char* getString() const {
 		return str;
 	}
 	char* getString() {
@@ -63,17 +62,24 @@ public:
 
 	// Operators
 
-	/*String& operator=(const String& other) {
-		this->size = other.getSize();
+	String& operator=(const String& other) {
+		if (this == &other) return *this;
+		delete[] this->str;
+		this->size = other.size;
+		this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 		{
 			this->str[i] = other.getString()[i];
 		}
 		cout << "Copy assignment \t" << this << endl;
 		return *this;
-	}*/
+	}
 
-	char& operator[](int index) const {
+	char operator[](int index) const {
+		return str[index];
+	}
+
+	char& operator[](int index) {
 		return str[index];
 	}
 
@@ -86,29 +92,18 @@ public:
 
 };
 
-int length(const char* str){
-	int length = 0;
-	for (int i = 0; str[i]; i++)
-	{
-		length++;
-	}
-	return ++length;
-}
-
 ostream& operator<<(ostream& os, String& obj) {
 	cout << "Size:\t" << obj.getSize() << endl;
 	cout << "String:\t" << obj.getString();
 	return os;
 }
 
-//istream& operator>>(istream& is, String& obj) {
-//	const int size = 256;
-//	char buffer[size] = {};
-//	is.getline(buffer, size);
-//	obj.setString(buffer);
-//	obj.setSize(length(buffer));
-//	return is;
-//}
+istream& operator>>(istream& is, String& obj) {
+	char buffer[256] = {};
+	is >> buffer;
+	obj = buffer;
+	return is;
+}
 
 String operator+(const String& left, const String& right) {
 	String cat(left.getSize() + right.getSize() - 1);
@@ -136,16 +131,19 @@ void main() {
 	String str4 = "World";
 	str4.print();
 
-	String str5 = str3 + str4;
+	String str5 = str3 + " " + str4;
 	str5.print();
 	cout << str5 << endl;
 
-	/*String str6;
-	str6 = str5;
+	String str6 = str3;
+	str6 = str4;
 	cout << str6 << endl;
+
+	str3 = str3;
+	cout << str3 << endl;
 
 	String str7;
 	cin >> str7;
-	cout << str7 << endl;*/
+	cout << str7 << endl;
 
 }
