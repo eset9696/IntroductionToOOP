@@ -41,16 +41,11 @@ public:
 			this->str[i] = string[i];
 		}
 		cout << delimeter << endl;
-		cout << "Char constructor\t" << this << endl;
+		cout << "Constructor\t\t" << this << endl;
 	}
 
 	String(const String& other) {
-		this->size = other.size;
-		this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-		{
-			this->str[i] = other.str[i];
-		}
+		String(other.getString());
 		cout << delimeter << endl;
 		cout << "Copy Constructor\t" << this << endl;
 	}
@@ -85,7 +80,7 @@ public:
 		return *this;
 	}
 
-	String& operator=(String&& rvalue) {
+	String& operator=(String&& rvalue) noexcept {
 		delete[] this->str;
 		str = rvalue.str;
 		size = rvalue.size;
@@ -139,7 +134,7 @@ String operator+(const String& left, const String& right) {
 void main() {
 	setlocale(LC_ALL, "");
 
-	/*String str1;
+	String str1;
 	str1.print();
 
 	String str2(5);
@@ -161,18 +156,23 @@ void main() {
 
 	str3 = str3;
 	cout << str3 << endl;
-	*/
-	/*String str7;
+	
+	String str7;
 	cin >> str7;
-	cout << str7 << endl;*/
+	cout << str7 << endl;
 
 	String str8 = String("hello");
-	/*String str9 = "hello";
-	String str10 = str8 + str9;
-	cout << str10 << endl;*/
-	/*str9 = str9 + str8;
-	cout << str9 << endl;
+
+	String str9 = "hello";
+
+	String str10 (str8 + str9);
+	str10.print();
+
+	str9 = str9 + str8;
+	str9.print();
+
 	cout << str8 << endl;
-	char str1[] = "asde";
-	char* str(str1);*/
+
+	char str11[] = "asde";
+	char* str(str11);
 }
