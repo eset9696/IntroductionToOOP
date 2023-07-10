@@ -6,7 +6,6 @@ using std::cout;
 #define delimeter "\n---------------------\n"
 
 class String;
-int length(const char* str);
 
 class String {
 
