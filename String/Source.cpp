@@ -81,6 +81,7 @@ public:
 	}
 
 	String& operator=(String&& rvalue) noexcept {
+		if (this == &rvalue) return *this;
 		delete[] this->str;
 		str = rvalue.str;
 		size = rvalue.size;
