@@ -10,7 +10,7 @@ class String;
 class String {
 
 	int size;                //Размер строки в байтах
-	char* str;               //адрес строки в динамической памяти
+	char* str;             //адрес строки в динамической памяти
 
 public:
 
@@ -26,33 +26,38 @@ public:
 	}
 
 	//Constructors
-	explicit String(int size = 80) {
-		this->size = size;
-		this->str = new char[size] {};
+	explicit String(int size = 80) : size(size), str(new char[size] {}) {
+		//this->size = size;
+		//this->str = new char[size] {};
 		cout << delimeter << endl;
 		cout << "Default constructor\t" << this << endl;
 	}
 
-	String(const char* string) {
-		this->size = strlen(string) + 1;
-		this->str = new char[size] {};
+	String(const char* string) : size(strlen(string) + 1), str(new char[size] {}) {
+		//this->size = strlen(string) + 1;
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)
 		{
 			this->str[i] = string[i];
 		}
 		cout << delimeter << endl;
+
 		cout << "Constructor\t\t" << this << endl;
 	}
 
-	String(const String& other) {
-		String(other.getString());
+	String(const String& other) : size(other.size), str(new char[size] {}) {
+		//String(other.getString());
+		for (int i = 0; i < size; i++)
+		{
+			this->str[i] = other[i];
+		}
 		cout << delimeter << endl;
 		cout << "Copy Constructor\t" << this << endl;
 	}
 
-	String(String&& rvalue) noexcept {
-		this->str = rvalue.str; // shallow copy
-		this->size = rvalue.size;
+	String(String&& rvalue) noexcept : size(rvalue.size), str(rvalue.str) {
+		//this->str = rvalue.str; // shallow copy
+		//this->size = rvalue.size;
 		rvalue.str = nullptr;
 		rvalue.size = 0;
 		cout << delimeter << endl;
@@ -132,10 +137,15 @@ String operator+(const String& left, const String& right) {
 	return cat;
 }
 
+#define BASE_CHECK
+//#define CALLING_CONSTRUCTORS
+
 void main() {
 	setlocale(LC_ALL, "");
 
-	/*String str1;
+#ifdef BASE_CHECK
+
+	String str1;
 	str1.print();
 
 	String str2(5);
@@ -147,33 +157,31 @@ void main() {
 	String str4 = "World";
 	str4.print();
 
-	String str5 = str3 + " " + str4;
+	String str5 = move(str3 + " " + str4);
 	str5.print();
 	cout << str5 << endl;
 
-	String str6 = str3;
-	str6 = str4;
+	String str6 = str5;
 	cout << str6 << endl;
 
-	str3 = str3;
-	cout << str3 << endl;
-	
-	String str7;
-	cin >> str7;
-	cout << str7 << endl;*/
+#endif // BASE_CHECK
+#ifdef CALLING_CONSTRUCTORS
+	String str1; // Default constructor
+	str1.print();
 
-	String str8 = String("hello");
+	String str2(5); 
+	str2.print();
 
-	String str9 = "hello";
+	String str3 = "Hello"; //Single argument constructor
+	str3.print();
 
-	String str10 = str8 + str9;
-	str10.print();
+	String str4;
+	str4.print();
 
-	str9 = str9 + str8;
-	str9.print();
+	String str5 = str3 + " " + str4;
+	str5.print();
+	cout << str5 << endl;
+#endif // CALLING_CONSTRUCTORS
 
-	cout << str8 << endl;
 
-	char str11[] = "asde";
-	char* str(str11);
 }
