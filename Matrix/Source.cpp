@@ -297,6 +297,7 @@ void main(){
 	cout << "matx4 = matx3 - matx2:\n" << matx4 << endl;
 
 	Matrix matx5 = matx1 * matx2;
+	matx5.print();
 	cout << "matx5 = matx1 * matx2:\n" << matx5 << endl;
 
 	Matrix matx6;
