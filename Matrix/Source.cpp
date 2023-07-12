@@ -184,12 +184,10 @@ Matrix operator*(const Matrix& left, const Matrix& right) {
 	Matrix result(left.getRows(), left.getCols());
 	for (int i = 0; i < left.getRows(); i++) {
 		for (int j = 0; j < left.getCols(); j++) {
-			double res = 0;
 			for (int k = 0; k < left.getCols(); k++)
 			{
-				res += left[i][k] * right[k][j];
+				result[i][j] += left[i][k] * right[k][j];
 			}
-			result[i][j] = res;
 		}
 	}
 	return result;
@@ -238,7 +236,7 @@ void FillRand(double**& matrix, const int rows, const int cols) {
 }
 
 void FillMat(double**& matrix, const int rows, const int cols) {
-	double count = 0.5;
+	double count = 0;
 	for (int i = 0; i < rows; i++)
 	{
 		for (int j = 0; j < cols; j++)
