@@ -27,30 +27,19 @@ public:
 
 	//Constructors
 	explicit String(int size = 80) : size(size), str(new char[size] {}) {
-		//this->size = size;
-		//this->str = new char[size] {};
 		cout << delimeter << endl;
 		cout << "Default constructor\t" << this << endl;
 	}
 
-	String(const char* string) : size(strlen(string) + 1), str(new char[size] {}) {
-		//this->size = strlen(string) + 1;
-		//this->str = new char[size] {};
-		for (int i = 0; i < size; i++)
-		{
+	String(const char* string) : String(strlen(string) + 1) {
+		for (int i = 0; i < size; i++) {
 			this->str[i] = string[i];
 		}
 		cout << delimeter << endl;
-
 		cout << "Constructor\t\t" << this << endl;
 	}
 
-	String(const String& other) : size(other.size), str(new char[size] {}) {
-		//String(other.getString());
-		for (int i = 0; i < size; i++)
-		{
-			this->str[i] = other[i];
-		}
+	String(const String& other) : String(other.str) {
 		cout << delimeter << endl;
 		cout << "Copy Constructor\t" << this << endl;
 	}
