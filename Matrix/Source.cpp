@@ -35,7 +35,7 @@ public:
 
 	//constructors
 
-	Matrix(int rows = 0, int cols = 0) {
+	Matrix(int rows = 2, int cols = 2) {
 		this->rows = rows;
 		this->cols = cols;
 		this->matrix = new double* [rows] {};
@@ -43,7 +43,7 @@ public:
 			matrix[i] = new double[cols] {};
 		}
 		cout << delimeter << endl;
-		cout << "Default constructor:\t" << this << endl;
+		cout << "2 Arg constructor:\t" << this << endl;
 	}
 
 	Matrix(double** other, int rows, int cols) {
@@ -297,7 +297,6 @@ void main(){
 	cout << "matx4 = matx3 - matx2:\n" << matx4 << endl;
 
 	Matrix matx5 = matx1 * matx2;
-	matx5.print();
 	cout << "matx5 = matx1 * matx2:\n" << matx5 << endl;
 
 	Matrix matx6;
