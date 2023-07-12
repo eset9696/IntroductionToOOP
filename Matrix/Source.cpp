@@ -10,6 +10,11 @@ double** Allocate(const int rows, const int cols);
 void FillRand(int**& matrix, const int rows, const int cols);
 void Print(const int** matrix, const int rows, const int cols);
 void ClearMat(Matrix& obj);
+Matrix operator+(const Matrix& left, const Matrix& right);
+Matrix operator-(const Matrix& left, const Matrix& right);
+Matrix operator*(const Matrix& left, const Matrix& right);
+ostream& operator<<(ostream& os, const Matrix& obj);
+
 class Matrix{
 	int rows;
 	int cols;
@@ -33,7 +38,7 @@ public:
 	Matrix(int rows = 0, int cols = 0) {
 		this->rows = rows;
 		this->cols = cols;
-		this->matrix = new double* [rows];
+		this->matrix = new double* [rows] {};
 		for (int i = 0; i < rows; i++) {
 			matrix[i] = new double[cols] {};
 		}
@@ -181,9 +186,9 @@ Matrix operator-(const Matrix& left, const Matrix& right) {
 
 Matrix operator*(const Matrix& left, const Matrix& right) {
 	if (left.getCols() != right.getRows()) return left;
-	Matrix result(left.getRows(), left.getCols());
-	for (int i = 0; i < left.getRows(); i++) {
-		for (int j = 0; j < left.getCols(); j++) {
+	Matrix result(left.getRows(), right.getCols());
+	for (int i = 0; i < result.getRows(); i++) {
+		for (int j = 0; j < result.getCols(); j++) {
 			for (int k = 0; k < left.getCols(); k++)
 			{
 				result[i][j] += left[i][k] * right[k][j];
