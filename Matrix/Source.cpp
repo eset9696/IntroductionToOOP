@@ -207,6 +207,17 @@ ostream& operator<<(ostream& os, const Matrix& obj) {
 	return os;
 }
 
+//istream& operator>>(istream& is, const Matrix& obj) {
+//	for (int i = 0; i < obj.getRows(); i++)
+//	{
+//		for (int j = 0; j < obj.getCols(); j++)
+//		{
+//			cin >> obj.getMatrix()[i][j];
+//		}
+//	}
+//	return is;
+//}
+
 double** Allocate(const int rows, const int cols) {
 	double** matrix = new double*[rows];
 	for (int i = 0; i < rows; i++)
