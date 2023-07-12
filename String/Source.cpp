@@ -51,7 +51,7 @@ public:
 	}
 
 	String(String&& rvalue) noexcept {
-		this->str = rvalue.str;
+		this->str = rvalue.str; // shallow copy
 		this->size = rvalue.size;
 		rvalue.str = nullptr;
 		rvalue.size = 0;
@@ -108,7 +108,7 @@ public:
 
 };
 
-ostream& operator<<(ostream& os, String& obj) {
+ostream& operator<<(ostream& os, const String& obj) {
 	cout << "Size:\t" << obj.getSize() << endl;
 	cout << "String:\t" << obj.getString();
 	return os;
@@ -135,7 +135,7 @@ String operator+(const String& left, const String& right) {
 void main() {
 	setlocale(LC_ALL, "");
 
-	String str1;
+	/*String str1;
 	str1.print();
 
 	String str2(5);
@@ -160,13 +160,13 @@ void main() {
 	
 	String str7;
 	cin >> str7;
-	cout << str7 << endl;
+	cout << str7 << endl;*/
 
 	String str8 = String("hello");
 
 	String str9 = "hello";
 
-	String str10 (str8 + str9);
+	String str10 = str8 + str9;
 	str10.print();
 
 	str9 = str9 + str8;
